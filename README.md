@@ -54,7 +54,3 @@ FlowPyStudio/
 ├── theme/                # theming
 └── assets/
 ```
-
-## License
-
-MIT
