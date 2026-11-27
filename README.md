@@ -22,7 +22,7 @@ designing flowcharts and automatically generating runnable Python code from them
 ## Installation
 
 ```bash
-git clone https://github.com/<your-username>/FlowPyStudio.git
+git clone https://github.com/mahdi-hajizadh/FlowPyStudio.git
 cd FlowPyStudio
 pip install -r requirements.txt
 ```
@@ -41,6 +41,8 @@ python main.py
 4. Click **Generate Code** to turn the flowchart into Python code, then
    **Run Code** to execute it.
 
+Generated Python runs with your local user permissions. Review code before running it and open flowcharts from sources you trust.
+
 ## Project structure
 
 ```
@@ -52,5 +54,5 @@ FlowPyStudio/
 ├── models/               # Shape / Arrow / Flowchart data models
 ├── storage/              # save/load project files
 ├── theme/                # theming
-└── assets/
+└── theme_config.json
 ```

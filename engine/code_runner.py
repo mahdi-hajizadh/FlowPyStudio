@@ -1,5 +1,6 @@
 import sys
 import io
+from contextlib import redirect_stdout
 import subprocess
 import tempfile
 import os
@@ -14,31 +15,17 @@ class CodeRunner:
         if not code or not code.strip():
             return "No code to execute"
             
-        # Method 1: Using exec (simpler, but limited)
+        output_buffer = io.StringIO()
         try:
-            # Capture stdout
-            old_stdout = sys.stdout
-            sys.stdout = io.StringIO()
-            
-            # Execute code
-            exec_globals = {}
-            exec(code, exec_globals)
-            
-            # Get output
-            output = sys.stdout.getvalue()
-            
-            # Restore stdout
-            sys.stdout = old_stdout
-            
-            return output if output else "Code executed successfully (no output)"
-            
-        except Exception as e:
-            # Restore stdout on error
-            sys.stdout = old_stdout
-            return f"Error: {str(e)}"
-            
+            with redirect_stdout(output_buffer):
+                exec(code, {})
+        except (Exception, SystemExit) as error:
+            return f"Error: {error}"
+
+        return output_buffer.getvalue() or "Code executed successfully (no output)"
+
     def run_with_subprocess(self, code):
-        """Execute code in subprocess (more secure)"""
+        """Execute code in a subprocess with a timeout"""
         if not code or not code.strip():
             return "No code to execute"
             
