@@ -5,7 +5,7 @@ from ui import load_saved_theme
 def main():
     saved_theme = load_saved_theme()
 
-    # انتخاب تم ذخیره‌شده
+    # Choose the saved theme.
     if saved_theme == "dark":
         root = tb.Window(themename="darkly")
     else:

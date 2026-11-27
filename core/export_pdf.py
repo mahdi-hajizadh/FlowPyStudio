@@ -2,14 +2,9 @@ from fpdf import FPDF
 
 
 def save_code_as_pdf(code_text, filename="flowchart_code.pdf"):
-    """
-    ذخیره کد تولیدشده به صورت PDF.
+    """Save the generated code as a PDF.
 
-    دو مشکل نسخه‌ی قبلی:
-    1) اگر متن کد شامل کاراکتر غیر از حروف لاتین باشه (مثلاً فارسی)،
-       فونت پایه‌ی Courier کرش می‌کرد چون فقط از Latin-1 پشتیبانی می‌کنه.
-    2) خط‌های طولانی به‌جای شکسته‌شدن، از لبه‌ی صفحه بیرون می‌زدن و بریده می‌شدن،
-       چون از pdf.cell() به‌جای multi_cell() استفاده شده بود.
+    Wrap long lines within the page and replace characters that the built-in Courier font cannot encode.
     """
     pdf = FPDF()
     pdf.add_page()
@@ -29,8 +24,5 @@ def save_code_as_pdf(code_text, filename="flowchart_code.pdf"):
 
 
 def _make_pdf_safe(text: str) -> str:
-    """
-    تبدیل متن به چیزی که فونت پایه‌ی Courier (فقط Latin-1) بتونه رندرش کنه.
-    کاراکترهای پشتیبانی‌نشده (مثل فارسی) به جای کرش‌کردن، با '?' جایگزین می‌شن.
-    """
+    """Replace characters outside Latin-1 with a question mark for the built-in Courier font."""
     return text.encode("latin-1", "replace").decode("latin-1")

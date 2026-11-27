@@ -8,11 +8,11 @@ class StateManager:
         self.undo_stack = []
         self.redo_stack = []
         self.max_states = 50
-        # ذخیره حالت اولیه
+        # Save the initial state.
         self.save_state()
         
     def save_state(self):
-        """ذخیره وضعیت فعلی برای Undo"""
+        """Save the current state for undo."""
         print("=== StateManager.save_state called ===")
         try:
             state = self._serialize_flowchart()
@@ -30,7 +30,7 @@ class StateManager:
             return False
         
     def undo(self):
-        """بازگشت به حالت قبلی"""
+        """Restore the previous state."""
         print("=== StateManager.undo called ===")
         print(f"Undo stack size: {len(self.undo_stack)}")
         
@@ -39,11 +39,11 @@ class StateManager:
             return False
             
         try:
-            # ذخیره حالت فعلی برای Redo
+            # Save the current state for redo.
             current_state = self._serialize_flowchart()
             self.redo_stack.append(current_state)
             
-            # حذف حالت فعلی و رفتن به حالت قبلی
+            # Discard the current state and restore the previous one.
             self.undo_stack.pop()
             state = self.undo_stack[-1]
             self._deserialize_flowchart(state)
@@ -56,7 +56,7 @@ class StateManager:
             return False
         
     def redo(self):
-        """رفتن به حالت بعدی"""
+        """Restore the next state."""
         print("=== StateManager.redo called ===")
         print(f"Redo stack size: {len(self.redo_stack)}")
         
@@ -65,11 +65,11 @@ class StateManager:
             return False
             
         try:
-            # ذخیره حالت فعلی برای Undo
+            # Save the current state for undo.
             current_state = self._serialize_flowchart()
             self.undo_stack.append(current_state)
             
-            # بازیابی حالت بعدی
+            # Restore the next state.
             state = self.redo_stack.pop()
             self._deserialize_flowchart(state)
             print(f"Redo successful! Redo stack: {len(self.redo_stack)}")
@@ -81,20 +81,20 @@ class StateManager:
             return False
         
     def clear(self):
-        """پاک کردن همه حالت‌ها"""
+        """Clear the saved states."""
         self.undo_stack.clear()
         self.redo_stack.clear()
         self.save_state()
         
     def _serialize_flowchart(self):
-        """تبدیل فلوچارت به دیکشنری"""
+        """Serialize the flowchart to a dictionary."""
         data = {
             "nodes": [],
             "edges": []
         }
         
         for node in self.flowchart.nodes:
-            # بررسی نوع node.type
+            # Check the node type.
             if hasattr(node.type, 'value'):
                 type_str = node.type.value
             else:
@@ -117,11 +117,11 @@ class StateManager:
         return data
         
     def _deserialize_flowchart(self, data):
-        """بازیابی فلوچارت از دیکشنری"""
-        # پاک کردن فلوچارت فعلی
+        """Restore the flowchart from a dictionary."""
+        # Clear the current flowchart.
         self.flowchart.clear()
         
-        # بازیابی گره‌ها
+        # Restore the nodes.
         for node_data in data["nodes"]:
             type_str = node_data["type"]
             try:
@@ -134,7 +134,7 @@ class StateManager:
             shape.text = node_data["text"]
             self.flowchart.add_node(shape)
             
-        # بازیابی یال‌ها
+        # Restore the edges.
         for edge_data in data["edges"]:
             edge = Arrow(edge_data["from"], edge_data["to"])
             self.flowchart.add_edge(edge)

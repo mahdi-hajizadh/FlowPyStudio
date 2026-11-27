@@ -5,12 +5,12 @@ designing flowcharts and automatically generating runnable Python code from them
 
 ![FlowPy Studio showing a branching flowchart, generated Python, and the output Passed](docs/flowchart-preview.png)
 
-The example turns a score check into a Python `if` statement and displays the result in the output panel.
+Open the included [score-check flowchart](docs/score-check.flowpy) from the File menu, then generate and run it to see the result in the output panel.
 
 ## Features
 
 - Drag-and-drop flowchart editor on an interactive canvas
-- Shapes: Start/End, Process, Decision, For Loop, While Loop, Input/Output
+- Shapes: Start, Process, Decision, For Loop, While Loop, Input/Output
 - Automatic Python code generation from the flowchart
 - Run the generated code directly inside the app and see the output
 - Export the flowchart as a PNG image
@@ -21,14 +21,23 @@ The example turns a score check into a Python `if` statement and displays the re
 ## Requirements
 
 - Python 3.10+
+- Tk support (check with `python -m tkinter`)
 - See [requirements.txt](requirements.txt)
 
 ## Installation
 
+Download the source package from [Releases](https://github.com/mahdi-hajizadh/FlowPyStudio/releases/latest) or clone the repository.
+
 ```bash
 git clone https://github.com/mahdi-hajizadh/FlowPyStudio.git
 cd FlowPyStudio
-pip install -r requirements.txt
+python -m venv .venv
+```
+
+Activate the environment with `source .venv/bin/activate` on Linux or macOS, or `.\.venv\Scripts\Activate.ps1` in Windows PowerShell. Then install the dependencies.
+
+```bash
+python -m pip install -r requirements.txt
 ```
 
 ## Usage
@@ -58,5 +67,6 @@ FlowPyStudio/
 ├── models/               # Shape / Arrow / Flowchart data models
 ├── storage/              # save/load project files
 ├── theme/                # theming
+├── docs/               # preview and example flowchart
 └── theme_config.json
 ```

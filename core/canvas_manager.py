@@ -182,7 +182,7 @@ class CanvasManager:
     def select_item(self, x, y):
         items = self.canvas.find_overlapping(x - 2, y - 2, x + 2, y + 2)
 
-        # اول شکل‌ها رو بررسی کن (اولویت با شکل‌هاست)
+        # Check shapes first so they take priority over arrows.
         for item in items:
             tags = self.canvas.gettags(item)
             if "shape" in tags:
@@ -190,7 +190,7 @@ class CanvasManager:
                 self.canvas.itemconfig(item, outline="red", width=3)
                 return True
 
-        # اگر شکلی زیر کلیک نبود، فلش‌ها رو بررسی کن
+        # Check arrows if no shape was clicked.
         for item in items:
             tags = self.canvas.gettags(item)
             if "arrow" in tags:
