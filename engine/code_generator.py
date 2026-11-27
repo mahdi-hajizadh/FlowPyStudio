@@ -52,7 +52,7 @@ class CodeGenerator:
             line = node.text.strip()
             self.code_lines.append(f"{indent}{line}")
 
-            # اگر خط یک بلاک جدید باز می‌کند (مثل for یا if)
+            # Increase indentation when this line opens a block, such as a for or if block.
             if line.endswith(":"):
                 self.indent_level += 1
 
@@ -71,7 +71,7 @@ class CodeGenerator:
             self.code_lines.append(f"{indent}{line}")
             self.indent_level += 1
 
-            # فلش اول = بدنه‌ی حلقه (داخل تورفتگی)
+            # The first arrow leads to the indented loop body.
             if outgoing:
                 body_edge = outgoing[0]
                 body_node = self.flowchart.get_node(body_edge.to_id)
@@ -82,7 +82,7 @@ class CodeGenerator:
 
             self.indent_level -= 1
 
-            # فلش دوم = ادامه‌ی کد بعد از حلقه (خارج از تورفتگی)
+            # The second arrow leads to the code after the loop.
             if len(outgoing) > 1:
                 after_edge = outgoing[1]
                 after_node = self.flowchart.get_node(after_edge.to_id)
@@ -93,7 +93,7 @@ class CodeGenerator:
         elif node.type == ShapeType.DECISION:
             condition = node.text.strip()
 
-            # اگر کاربر خودش "if" یا ":" اضافه نوشته باشه، حذفش کن تا تکراری نشه
+            # Strip an existing "if" prefix or trailing colon to avoid duplicating it.
             if condition.lower().startswith("if "):
                 condition = condition[3:].strip()
             elif condition.lower() == "if":
@@ -123,8 +123,8 @@ class CodeGenerator:
                     self._generate_from_node(false_node)
                 self.indent_level -= 1
         
-        # ادامه مسیر برای گره‌های غیر تصمیم‌گیری و غیر حلقه
-        # (Decision و Loop مسیر خروجی‌هاشون رو خودشون در بالا مدیریت می‌کنند)
+        # Continue following outgoing edges for nodes other than decisions and loops.
+        # Decisions and loops handle their outgoing edges above.
         if node.type not in (ShapeType.DECISION, ShapeType.FOR_LOOP, ShapeType.WHILE_LOOP):
             for edge in outgoing:
                 next_node = self.flowchart.get_node(edge.to_id)

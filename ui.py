@@ -21,7 +21,7 @@ CONFIG_FILE = "theme_config.json"
 
 
 def load_saved_theme():
-    """خواندن تم ذخیره‌شده از فایل تنظیمات"""
+    """Read the saved theme from the settings file."""
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE, "r", encoding="utf-8") as f:
@@ -33,7 +33,7 @@ def load_saved_theme():
 
 
 def save_theme(theme: str):
-    """ذخیره تم در فایل تنظیمات"""
+    """Write the theme to the settings file."""
     try:
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump({"theme": theme}, f)
@@ -43,26 +43,26 @@ def save_theme(theme: str):
 
 class FlowPyUI:
     def __init__(self, root: tb.Window):
-        # پنجره اصلی
+        # Main window
         self.root = root
         self.root.title("FlowPy Studio")
         self.root.geometry("1200x800")
 
-        # تم‌ها
+        # Themes
         self.dark_theme = "darkly"
         self.light_theme = "flatly"
 
-        # خواندن تم ذخیره‌شده
+        # Load the saved theme.
         saved_theme = load_saved_theme()
-        self.current_theme_mode = saved_theme  # "dark" یا "light"
+        self.current_theme_mode = saved_theme  # "dark" or "light"
 
-        # اعمال تم اولیه روی ttkbootstrap
+        # Apply the initial ttkbootstrap theme.
         if self.current_theme_mode == "dark":
             self.root.style.theme_use(self.dark_theme)
         else:
             self.root.style.theme_use(self.light_theme)
 
-        # اجزای اصلی برنامه
+        # Main application components
         self.flowchart = Flowchart()
         self.canvas_manager = CanvasManager(self.flowchart)
         self.event_handler = EventHandler(self.canvas_manager, self.flowchart)
@@ -75,13 +75,13 @@ class FlowPyUI:
         self.code_generator = CodeGenerator()
         self.code_runner = CodeRunner()
 
-        # ساخت رابط کاربری
+        # Build the interface.
         self.setup_ui()
         self.setup_menu()
         self.apply_theme()
 
     def _panel_bootstyle(self):
-        """استایل مناسب پنل‌ها بر اساس حالت روشن/تیره فعلی"""
+        """Return the panel style for the current theme mode."""
         return DARK if self.current_theme_mode == "dark" else LIGHT
 
     # ---------------------------------------------------------
@@ -91,7 +91,7 @@ class FlowPyUI:
         main_container = tb.Frame(self.root)
         main_container.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
-        # نوار ابزار بالا
+        # Top toolbar
         self.toolbar = tb.Frame(main_container)
         self.toolbar.pack(fill=tk.X, pady=(0, 5))
 
@@ -115,7 +115,7 @@ class FlowPyUI:
         for text, cmd in buttons:
             tb.Button(self.toolbar, text=text, command=cmd, bootstyle=SECONDARY).pack(side=tk.LEFT, padx=3)
 
-        # ناحیه‌ی Canvas
+        # Canvas area
         panel_style = self._panel_bootstyle()
         self.canvas_frame = tb.Frame(main_container, bootstyle=panel_style)
         self.canvas_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
@@ -133,7 +133,7 @@ class FlowPyUI:
 
         self.canvas_manager.set_canvas(self.canvas)
 
-        # رویدادها
+        # Event bindings
         self.canvas.bind("<Button-1>", self.event_handler.on_click)
         self.canvas.bind("<B1-Motion>", self.event_handler.on_drag)
         self.canvas.bind("<ButtonRelease-1>", self.event_handler.on_release)
@@ -141,7 +141,7 @@ class FlowPyUI:
         self.canvas.bind("<Double-Button-1>", self.event_handler.on_double_click)
         self.canvas.focus_set()
 
-        # پنل راست (کد و خروجی)
+        # Right panel for code and output
         self.right_panel = tb.Frame(main_container, width=400, bootstyle=panel_style)
         self.right_panel.pack(side=tk.RIGHT, fill=tk.BOTH, padx=(5, 0))
         self.right_panel.pack_propagate(False)
@@ -359,7 +359,7 @@ class FlowPyUI:
         self.code_text.config(bg=bg, fg=fg)
         self.output_text.config(bg=bg, fg=fg)
 
-        # هماهنگ‌سازی پنل‌ها و نوار وضعیت با حالت روشن/تیره فعلی
+        # Update the panels and status bar to match the current light or dark theme.
         panel_style = self._panel_bootstyle()
         self.canvas_frame.configure(bootstyle=panel_style)
         self.right_panel.configure(bootstyle=panel_style)

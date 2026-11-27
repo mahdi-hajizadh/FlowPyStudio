@@ -1,0 +1,17 @@
+{
+  "name": "Score check",
+  "nodes": [
+    {"id": "start", "type": "start", "text": "Start", "x": 342, "y": 45},
+    {"id": "score", "type": "process", "text": "score = 85", "x": 342, "y": 145},
+    {"id": "check", "type": "decision", "text": "score >= 70", "x": 342, "y": 245},
+    {"id": "pass", "type": "io", "text": "\"Passed\"", "x": 212, "y": 365},
+    {"id": "retry", "type": "io", "text": "\"Try again\"", "x": 472, "y": 365}
+  ],
+  "edges": [
+    {"id": "start-score", "from": "start", "to": "score", "direction": "down"},
+    {"id": "score-check", "from": "score", "to": "check", "direction": "down"},
+    {"id": "check-pass", "from": "check", "to": "pass", "direction": "down"},
+    {"id": "check-retry", "from": "check", "to": "retry", "direction": "down"}
+  ],
+  "version": "1.0"
+}

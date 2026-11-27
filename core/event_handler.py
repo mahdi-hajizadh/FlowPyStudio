@@ -23,7 +23,7 @@ class EventHandler:
         tool = self.current_tool
         print(f"TOOL: {tool}")
 
-        # ---------- حالت Arrow ----------
+        # ---------- Arrow tool ----------
         if tool == "arrow":
             print("Arrow mode activated!")
             items = self.canvas_manager.canvas.find_overlapping(
@@ -31,7 +31,7 @@ class EventHandler:
             )
             print(f"Items under click: {len(items)}")
 
-            # فقط آیتم‌هایی که tag "shape" دارند
+            # Only consider items tagged "shape".
             shape_items = [
                 item for item in items
                 if "shape" in self.canvas_manager.canvas.gettags(item)
@@ -76,7 +76,7 @@ class EventHandler:
                             self.canvas_manager.arrow_start = None
                             return
 
-            # اگر هیچ shape پیدا نشد و قبلاً start تنظیم شده بود → لغو
+            # Cancel the pending arrow if no shape was clicked.
             if self.canvas_manager.arrow_start is not None:
                 self.canvas_manager.arrow_start = None
                 if self.ui:
@@ -84,13 +84,13 @@ class EventHandler:
                 print("Arrow cancelled")
             return
 
-        # ---------- ابزارهای دیگر ----------
+        # ---------- Other tools ----------
         items = self.canvas_manager.canvas.find_overlapping(
             event.x - 2, event.y - 2, event.x + 2, event.y + 2
         )
         print(f"Items under click: {len(items)}")
 
-        # فقط آیتم‌هایی که tag "shape" دارند
+        # Only consider items tagged "shape".
         shape_items = [
             item for item in items
             if "shape" in self.canvas_manager.canvas.gettags(item)
@@ -114,7 +114,7 @@ class EventHandler:
 
         print("No shape found")
 
-        # اگر روی شکل کلیک نشده و ابزار select نیست، شکل بساز
+        # Create a shape when clicking the background with a drawing tool.
         if tool != "select":
             shape_type = self._tool_to_shape_type(tool)
             if shape_type:

@@ -2,14 +2,9 @@ from PIL import Image, ImageDraw
 
 
 def save_canvas_as_image(canvas, filename="flowchart.png"):
-    """
-    ساخت تصویر PNG مستقیماً از روی آیتم‌های واقعی Canvas
-    (بدون گرفتن اسکرین‌شات از صفحه).
+    """Render a PNG directly from the canvas items.
 
-    این روش وابسته به اسکرین‌شات نیست، پس:
-    - اگر پنجره‌ی دیگری روی برنامه باشد تأثیری ندارد
-    - در DPI Scaling های مختلف ویندوز درست کار می‌کند
-    - حتی اگر پنجره کوچک/جابه‌جا شده باشد نتیجه درست است
+    A direct render is independent of window position, occlusion, and display scaling.
     """
     canvas.update()
 
@@ -35,8 +30,8 @@ def save_canvas_as_image(canvas, filename="flowchart.png"):
 
         fill = canvas.itemcget(item, "fill") or None
 
-        # فقط rectangle / oval / polygon گزینه‌ی outline دارند؛
-        # line و text چنین گزینه‌ای ندارند و خواستنش خطای Tkinter می‌دهد
+        # Only rectangles, ovals, and polygons support the outline option.
+        # Requesting an outline from a line or text item raises a Tkinter error.
         if item_type in ("rectangle", "oval", "polygon"):
             outline = canvas.itemcget(item, "outline") or None
         else:
@@ -59,7 +54,7 @@ def save_canvas_as_image(canvas, filename="flowchart.png"):
 
         elif item_type == "line":
             draw.line(coords, fill=fill or "white", width=line_width)
-            # رسم سر پیکان به‌صورت دستی (چون PIL پیکان آماده نداره)
+            # Draw the arrowhead manually because Pillow does not provide one.
             if len(coords) >= 4:
                 _draw_arrowhead(draw, coords, fill or "white")
 
@@ -80,7 +75,7 @@ def save_canvas_as_image(canvas, filename="flowchart.png"):
 
 
 def _draw_arrowhead(draw, coords, color, size=10, angle_deg=25):
-    """رسم یک سر پیکان مثلثی ساده در انتهای خط"""
+    """Draw a triangular arrowhead at the end of the line."""
     import math
 
     x1, y1 = coords[-4], coords[-3]
