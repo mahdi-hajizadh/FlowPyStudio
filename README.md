@@ -3,6 +3,10 @@
 FlowPy Studio is a desktop app (built with Python + Tkinter/ttkbootstrap) for visually
 designing flowcharts and automatically generating runnable Python code from them.
 
+![FlowPy Studio showing a branching flowchart, generated Python, and the output Passed](docs/flowchart-preview.png)
+
+The example turns a score check into a Python `if` statement and displays the result in the output panel.
+
 ## Features
 
 - Drag-and-drop flowchart editor on an interactive canvas
